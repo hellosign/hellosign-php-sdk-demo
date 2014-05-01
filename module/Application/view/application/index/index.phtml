@@ -1,0 +1,33 @@
+<div class="jumbotron">
+    <h1><?php echo sprintf($this->translate('%sHelloSign%s PHP Samples'), '<span class="zf-green">', '</span>') ?></h1>
+    <p><?php echo sprintf($this->translate('You may be interested in the following')) ?></p>
+
+    <ul>
+        <li><a href="<?php echo $this->url('embedded-signing') ?>">Embedded Signing</a></li>
+        <li><a href="<?php echo $this->url('embedded-template-signing') ?>">Embedded Signing from a Template</a></li>
+        <li><a href="<?php echo $this->url('embedded-request') ?>">Embedded Requesting</a></li>
+        <li><a href="<?php echo $this->url('oauth') ?>">OAuth Demo</a></li>
+    </ul>
+</div>
+
+<h2>Before You Begin</h2>
+<blockquote>
+    <ol>
+        <li>
+            <p>Obtain an API key.</p>
+            <p>Sign up for an API plan <a href="https://www.hellosign.com/api/pricing">here</a>. Adding embedded signing to your website requires a Silver or Gold API plan. However, you can test the functionality for free by creating signature requests in test mode.</p>
+        </li>
+        <li class="margin-top-20">
+            <p>Obtain a Client ID.</p>
+            <p>Sign up for a Client ID for your application <a href="https://www.hellosign.com/oauth/createAppForm">here</a>.</p>
+        </li>
+        <li class="margin-top-20">
+            <p>Set the API Key, Client ID &amp; Client Secret environment variables</p>
+<pre>
+heroku config:set HELLOSIGN_API_KEY=&lt;api_key&gt;
+heroku config:set HELLOSIGN_CLIENT_ID=&lt;client_id&gt;
+heroku config:set HELLOSIGN_CLIENT_SECRET=&lt;client_secret&gt;
+</pre>
+        </li>
+    </ol>
+</blockquote>

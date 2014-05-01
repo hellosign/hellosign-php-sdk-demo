@@ -1,0 +1,21 @@
+ <?php
+    $title = 'Embedded Template Signing Demo';
+    $description = 'This page demonstrates how you can add an embedded signature request from a Template to your PHP-based web application.';
+    $this->headTitle($title);
+    $this->headMeta()
+        ->setName("description", $description)
+        ->setName("og:title", $title)
+        ->setName("og:description", $description);
+ ?>
+
+<h1><?php echo $this->escapeHtml($title) ?></h1>
+<p class="lead"><?php echo $description ?></p>
+
+<h2>Try It Out</h2>
+<div id="demo_container">
+<p class="lead">Your Templates</p>
+<ul>
+<?php foreach ($templates as $template): ?>
+    <li><a href="<?php echo $this->url('embedded-template-signing', array('id' => $template->getId())) ?>"><?php echo$template->getTitle() ?></a></li>
+<?php endforeach ?>
+</ul>

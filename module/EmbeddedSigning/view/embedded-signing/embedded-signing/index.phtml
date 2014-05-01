@@ -1,0 +1,93 @@
+ <?php
+    $title = 'Embedded Signing Demo';
+    $description = 'This page demonstrates how you can add an embedded signature request to your PHP-based web application.';
+    $this->headTitle($title);
+    $this->headMeta()
+        ->setName("description", $description)
+        ->setName("og:title", $title)
+        ->setName("og:description", $description);
+
+    $script = <<<SCRIPT
+HelloSign.init("$client_id");
+HelloSign.open({
+    url: "$sign_url",
+    debug: true,
+    allowCancel: true,
+    messageListener: function(eventData) {
+        console.log("Event received:");
+        console.log(eventData);
+        var msg;
+        if (eventData.event == HelloSign.EVENT_SIGNED) {
+            msg = "Thanks for signing!";
+        } else {
+            msg = eventData.event;
+        }
+
+        $("#demo_container").html('<p>' + msg + '<p/><p><a href="{$this->url('embedded-signing')}">Try it again</a></p>');
+    }
+});
+SCRIPT;
+    if ($sign_url) {
+        $this->inlineScript()->appendScript($script);
+    }
+ ?>
+
+<h1><?php echo $this->escapeHtml($title) ?></h1>
+<p class="lead"><?php echo $description ?></p>
+
+<h2>Try It Out</h2>
+<div id="demo_container">
+<?php if ($error): ?>
+    <div class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong><?php echo $error->getName() ?></strong> <?php echo $error->getMessage() ?>
+    </div>
+<?php endif ?>
+<?php
+$form->setAttribute('action', $this->url('embedded-signing'));
+// $form->prepare();
+$this->form($form);
+?>
+<?php echo $this->form()->openTag($form) ?>
+<?php
+$files = $form->get('files');
+$file_errors = $files->getMessages();
+$has_error = empty($file_errors) ? '' : ' has-error';
+// Form not valid, but file uploads might be valid...
+// Get the temporary file information to show the user in the view
+$temp_files = $files->getValue() ? $files->getValue() : array();
+?>
+<h3>What needs to be signed?</h3>
+<div class="form-group<?php echo $has_error ?>">
+    <?php echo $this->formLabel($files) ?>
+    <div class="col-sm-10">
+        <div class="input-group">
+            <span class="input-group-btn">
+                <span class="btn btn-info btn-lg btn-file">
+                    Browse&hellip; <?php echo $this->formFile($files) ?>
+                </span>
+            </span>
+            <input type="text" class="form-control input-lg" readonly>
+        </div>
+        <?php
+            $items = array_map(function($file) {
+                return $file['name'];
+            }, $temp_files);
+        ?>
+        <?php echo $this->htmlList($items, false, array('class' => 'help-block')) ?>
+        <?php echo $this->formElementErrors($files) ?>
+    </div>
+</div>
+<h3>Who needs to sign it?</h3>
+<?php echo $this->formCollection($form->get('signers')) ?>
+<?php echo $this->formRow($form->get('add_signer')) ?>
+<h3>CC email addresses</h3>
+<?php echo $this->formCollection($form->get('cc_email_addresses')) ?>
+<?php echo $this->formRow($form->get('add_cc_email_address')) ?>
+<h3>Anything else?</h3>
+<?php echo $this->formRow($form->get('title')) ?>
+<?php echo $this->formRow($form->get('subject')) ?>
+<?php echo $this->formRow($form->get('message')) ?>
+<?php echo $this->formRow($form->get('submit')) ?>
+<?php echo $this->form()->closeTag() ?>
+</div>

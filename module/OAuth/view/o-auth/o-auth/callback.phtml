@@ -1,0 +1,12 @@
+ <?php
+    $title = 'OAuth Callback Demo';
+    $this->headTitle($title);
+    $this->headMeta()->setName("og:title", $title);
+
+    $script = <<<SCRIPT
+window.close();
+SCRIPT;
+    $this->inlineScript()->appendScript($script);
+ ?>
+
+<h1><?php echo $this->escapeHtml($title) ?></h1>

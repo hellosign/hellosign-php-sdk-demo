@@ -1,0 +1,50 @@
+ <?php
+    $title = 'Embedded Template Signing Demo';
+    $description = 'This page demonstrates how you can add an embedded signature request from a Template to your PHP-based web application.';
+    $this->headTitle($title);
+    $this->headMeta()
+        ->setName("description", $description)
+        ->setName("og:title", $title)
+        ->setName("og:description", $description);
+
+    $script = <<<SCRIPT
+HelloSign.init("$client_id");
+    HelloSign.open({
+        url: "$sign_url",
+        debug: true,
+        allowCancel: true,
+        messageListener: function(eventData) {
+            console.log("Event received: " + eventData);
+            var msg;
+            if (eventData.event == HelloSign.EVENT_SENT) {
+                msg = "Request Sent!";
+            } else if (eventData.event == HelloSign.EVENT_SIGNED) {
+                msg = "Request Signed!";
+            } else {
+                msg = eventData.event;
+            }
+
+            $("#demo_container").html('<p>' + msg + '<p/><p><a href="{$this->url('embedded-template-signing')}">Try it again</a></p>');
+        }
+    });
+SCRIPT;
+    if ($sign_url) {
+        $this->inlineScript()->appendScript($script);
+    }
+ ?>
+
+<h1><?php echo $this->escapeHtml($title) ?></h1>
+<p class="lead"><?php echo $description ?></p>
+
+<h2>Try It Out</h2>
+<div id="demo_container">
+<p class="lead">Please sign our NDA.</p>
+<?php
+$form->setAttribute('action', $this->url('embedded-template-signing', array('id' => $template_id)));
+// $form->prepare();
+$this->form($form);
+echo $this->form()->openTag($form);
+echo $this->formCollection($form);
+echo $this->form()->closeTag();
+?>
+</div>
