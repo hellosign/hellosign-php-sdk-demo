@@ -1,1 +1,1 @@
-web: sh www/heroku/web-boot.sh
+web: heroku-php-apache2 -C httpd.conf
